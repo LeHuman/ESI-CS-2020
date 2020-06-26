@@ -3,7 +3,7 @@ package simple_grader;
 import java.util.ArrayList;
 
 public enum TestEnum {
-    RECURSION(Tests.RECURSION), EXCEPTION(Tests.EXCEPTION);
+    RECURSION(Tests.RECURSION), EXCEPTION(Tests.EXCEPTION), SEARCH(Tests.SEARCH);
 
     protected Test test;
 

@@ -138,6 +138,7 @@ public class SimpleGrader {
         str += "\nWhen making a homework file make sure to\nuse the scanner class to take in input.";
         str += "\nAny new line that is output by your file\nwill be considered an answer.";
         str += "\nAnswers are case insensitive.\n";
+        str += "\nIn anycase, a template for any specific\nhomework should have been given to you.\n";
         str += "\n----------[ Usage ]----------\n";
         str += "\nMake sure to name your file the appropriate\nname and use this jar to test it\n";
         str += "\nIf testing freezes pressing Ctrl + C when\nfocused on the terminal will close the process\n";
@@ -158,7 +159,7 @@ public class SimpleGrader {
             str = args[0];
         }
 
-        if (args.length == 2 && args[1].equals(SECRETKEY)) {
+        if (args[1].equals(SECRETKEY)) {
             ADMIN = true;
             System.out.println("\n----------< ADMIN >----------");
         }

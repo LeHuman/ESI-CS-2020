@@ -19,4 +19,11 @@ public class Tests { // TODO: move tests to external encrypted file or online so
             add(new String[] { "none", "heck", "frick", "heck", "dumbo", "cool", "heck", "none", "none", "none" });
         }
     };
+    public static ArrayList<Object[]> SEARCH = new ArrayList<Object[]>() {
+        private static final long serialVersionUID = 1L;
+        {
+            add(new String[] { "1,3,4,6,8,12,45,67,79,86,91,103,105,109,268,279,379\n86", "\n1,5,68,79,468,4684,45348\n79" });
+            add(new Integer[] { 9, 3 });
+        }
+    };
 }

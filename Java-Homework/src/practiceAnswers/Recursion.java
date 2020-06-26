@@ -21,14 +21,24 @@ public class Recursion {
         return findJAC(str.substring(1));
     }
 
+    /**
+     * This main method is already setup to use a scanner to read user input
+     * <p>
+     * Only edit where your code should go
+     * <p>
+     * User Input:
+     * <p>
+     * Any line entered is string
+     * <p>
+     * Enter exit at anytime to exit the program
+     * 
+     * @param args String array passed when calling main
+     */
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         String voice = "";
-        while (!voice.equals("exit")) {
-            if (scan.hasNextLine()) {
-                voice = scan.nextLine();
-                System.out.println(findJAC(voice));
-            }
+        while (!(voice = scan.nextLine()).equals("exit")) {
+            System.out.println(findJAC(voice));
         }
         scan.close();
     }

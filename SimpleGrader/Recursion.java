@@ -24,10 +24,8 @@ public class Recursion {
         Scanner read = new Scanner(System.in);
         String voice = "";
         while (!voice.equals("exit")) {
-            if (read.hasNextLine()) {
-                voice = read.nextLine();
-                System.out.println(findJAC(voice));
-            }
+            voice = read.nextLine();
+            System.out.println(findJAC(voice));
         }
         read.close();
     }

@@ -13,7 +13,15 @@ public class Test extends ArrayList<Object[]> {
         this.length = 0;
     }
 
-    Test(Object[] questions, Object[] answers) throws InconsistentArrayLengthException {
+    public Test(ArrayList<Object[]> list) throws InconsistentArrayLengthException {
+        this.length = list.get(0).length;
+        if (list.get(1).length != length)
+            throw new InconsistentArrayLengthException();
+        super.add(list.get(0));
+        super.add(list.get(1));
+    }
+
+    public Test(Object[] questions, Object[] answers) throws InconsistentArrayLengthException {
         this.length = questions.length;
         if (answers.length != length)
             throw new InconsistentArrayLengthException();

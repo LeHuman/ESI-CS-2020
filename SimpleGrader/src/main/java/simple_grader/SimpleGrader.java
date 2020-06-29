@@ -7,7 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import simple_grader.resource_converter.TestCases;
+
 import java.lang.InterruptedException;
 
 public class SimpleGrader {
@@ -15,6 +21,7 @@ public class SimpleGrader {
     private static final String SECRETKEY = "Jumex";
     private static final String VERSION = "V1.0";
     private static boolean ADMIN = false;
+    private static HashMap<String, Test> tests;
 
     private static String getLines(InputStream ins) throws IOException {
         String line = null;
@@ -116,7 +123,7 @@ public class SimpleGrader {
 
     private static void runTest(String testName) throws IllegalArgumentException, IOException, InterruptedException,
             SecurityException, ClassNotFoundException {
-        Test test = TestEnum.valueOf(testName.toUpperCase()).getTest();
+        Test test = tests.get(testName.toUpperCase());
         Paper studentPaper = test(testName, test);
         System.out.println("\n---------[ Grading ]---------\n");
         studentPaper.grade(test);
@@ -131,8 +138,8 @@ public class SimpleGrader {
 
     private static void help() {
         String str = "\n-----[ Avaliable Tests ]-----\n\n";
-        for (TestEnum test : TestEnum.values()) {
-            str += test.toString() + "\n";
+        for (HashMap.Entry<String, Test> test : tests.entrySet()) {
+            str += test.getKey().toString() + "\n";
         }
         str += "\n-----------[ Help ]----------\n";
         str += "\nWhen making a homework file make sure to\nuse the scanner class to take in input.";
@@ -148,7 +155,11 @@ public class SimpleGrader {
         System.out.println(str);
     }
 
-    public static void main(String[] args) {
+    // TODO: check that JDK is installed
+    public static void main(String[] args)
+            throws InvalidFormatException, IOException, InconsistentArrayLengthException {
+        HashMap<String, Test> testMap = TestCases.getMap(SECRETKEY);
+        tests = testMap;
 
         String str;
 

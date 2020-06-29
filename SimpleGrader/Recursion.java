@@ -25,7 +25,7 @@ public class Recursion {
         String voice = "";
         while (!voice.equals("exit")) {
             voice = read.nextLine();
-            System.out.println(findJAC(voice));
+            System.out.println("I heard: " + voice);
         }
         read.close();
     }

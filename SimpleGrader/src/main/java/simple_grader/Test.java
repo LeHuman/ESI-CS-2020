@@ -2,7 +2,7 @@ package simple_grader;
 
 import java.util.ArrayList;
 
-public class Test extends ArrayList<Object[]> {
+public final class Test extends ArrayList<Object[]> {
 
     private static final long serialVersionUID = 2741324118260330237L;
     private static final int QUESTION = 0;

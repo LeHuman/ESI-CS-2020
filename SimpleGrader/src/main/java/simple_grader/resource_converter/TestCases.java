@@ -21,7 +21,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import simple_grader.InconsistentArrayLengthException;
 import simple_grader.Test;
 
-public class TestCases {
+public final class TestCases {
 
     private static final String TESTCASES_DIR = "/testCases.xlsx";
     private static final String TESTCASE_SHEET = "Main";
@@ -94,7 +94,9 @@ public class TestCases {
 
                     // if testName matches a file enum or is null throw exception
                     if (testName == null || TestFileEnum.contains(testName.toUpperCase())) {
-                        throw new MalformedCaseEntryException("Warning: Malformed test entry: Row " + rowNum);
+                        continue;
+                        // throw new MalformedCaseEntryException("Warning: Malformed test entry: Row " +
+                        // rowNum);
                     }
 
                     testName = testName.toUpperCase();

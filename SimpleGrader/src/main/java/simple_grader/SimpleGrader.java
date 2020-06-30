@@ -170,7 +170,7 @@ public class SimpleGrader {
             str = args[0];
         }
 
-        if (args[1].equals(SECRETKEY)) {
+        if (args.length == 2 && args[1] != null && args[1].equals(SECRETKEY)) {
             ADMIN = true;
             System.out.println("\n----------< ADMIN >----------");
         }

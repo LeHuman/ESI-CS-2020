@@ -22,6 +22,7 @@ public class Exception {
      * @return the calculated integer, -1 if unable to calculate
      */
     public static int compute(int[] a, int b) {
+
         try {
             if (b < 5) {
                 return a[1] / b;

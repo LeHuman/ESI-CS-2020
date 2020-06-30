@@ -2,7 +2,7 @@ package simple_grader;
 
 import java.util.ArrayList;
 
-public class Paper {
+public final class Paper {
 
     ArrayList<String> studentAnswers = new ArrayList<String>();
     private boolean exitStatus = false;

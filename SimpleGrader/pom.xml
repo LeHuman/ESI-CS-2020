@@ -24,7 +24,6 @@
         <jacoco.unit-tests.limit.branch-ratio>0%</jacoco.unit-tests.limit.branch-ratio>
         <jacoco.unit-tests.limit.class-complexity>20</jacoco.unit-tests.limit.class-complexity>
         <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
-        <tool.proguard.version>7.0.0</tool.proguard.version>
     </properties>
     <dependencies>
         <dependency>
@@ -199,87 +198,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Configures Proguard obfuscation tool to generate an
-     obfuscated version of the JAR file that replaces the
-     default unobfuscated JAR.
--->
-            <plugin>
-                <groupId>com.github.wvengen</groupId>
-                <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.0.13</version>
-                <executions>
-                    <execution>
-                        <id>obfuscation-packaging</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>proguard</goal>
-                        </goals>
-                        <configuration>
-                            <proguardVersion>${tool.proguard.version}</proguardVersion>
-                            <obfuscate>true</obfuscate>
-                            <attach>true</attach>
-                            <appendClassifier>false</appendClassifier>
-                            <addMavenDescriptor>true</addMavenDescriptor>
-                            <injar>${project.build.finalName}.jar</injar>
-                            <injarNotExistsSkip>true</injarNotExistsSkip>
-                            <libs>
-                                <lib>${java.home}/lib/rt.jar</lib>
-                            </libs>
-
-                            <options>
-                                <option>-keepdirectories</option>
-                                <option>-keeppackagenames org.apache.maven.plugin.my.MyMojo</option>
-                                <option>-keepnames class * implements org.apache.maven.plugin.AbstractMojo</option>
-                                <option>-keepclassmembers class * implements org.apache.maven.plugin.AbstractMojo {
-                        private                                     <![CDATA[<fields>]]>;
-                        private                                     <![CDATA[<methods>]]>;
-                    }
-                                </option>
-                                <option>-keepparameternames</option>
-                                <option>-renamesourcefileattribute SourceFile</option>
-                                <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,
-                        SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
-                                </option>
-                                <option>-target 1.8</option>
-                                <option>-keep public class * {
-                        public protected *;
-                        }
-                                </option>
-                                <option>-keepclassmembernames class * {
-                        java.lang.Class class$(java.lang.String);
-                        java.lang.Class class$(java.lang.String, boolean);
-                        }
-                                </option>
-                                <option>-keepclasseswithmembernames,includedescriptorclasses class * {
-                        native                                     <![CDATA[<methods>]]>;
-                        }
-                                </option>
-                                <option>-keepclassmembers,allowoptimization enum * {
-                        public static **[] values();
-                        public static ** valueOf(java.lang.String);
-                        }
-                                </option>
-                                <option>-keepclassmembers class * implements java.io.Serializable {
-                        static final long serialVersionUID;
-                        private static final java.io.ObjectStreamField[] serialPersistentFields;
-                        private void writeObject(java.io.ObjectOutputStream);
-                        private void readObject(java.io.ObjectInputStream);
-                        java.lang.Object writeReplace();
-                        java.lang.Object readResolve();
-                        }
-                                </option>
-                            </options>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>${tool.proguard.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

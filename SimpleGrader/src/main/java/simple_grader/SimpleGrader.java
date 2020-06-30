@@ -122,8 +122,10 @@ public class SimpleGrader {
     }
 
     private static void runTest(String testName) throws IllegalArgumentException, IOException, InterruptedException,
-            SecurityException, ClassNotFoundException {
+            SecurityException, ClassNotFoundException, IllegalArgumentException {
         Test test = tests.get(testName.toUpperCase());
+        if (test == null)
+            throw new IllegalArgumentException();
         Paper studentPaper = test(testName, test);
         System.out.println("\n---------[ Grading ]---------\n");
         studentPaper.grade(test);

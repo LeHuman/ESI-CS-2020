@@ -158,8 +158,7 @@ public class SimpleGrader {
     }
 
     // TODO: check that JDK is installed
-    public static void main(String[] args)
-            throws InvalidFormatException, IOException, InconsistentArrayLengthException {
+    public static void main(String[] args) throws IOException, InconsistentArrayLengthException {
         HashMap<String, Test> testMap = TestCases.getMap(SECRETKEY);
         tests = testMap;
 
@@ -178,13 +177,18 @@ public class SimpleGrader {
         }
 
         try {
-            vocalizeStart(str);
-            runTest(str);
+            try {
+                vocalizeStart(str);
+                runTest(str);
+            } catch (Exception e) {
+                System.out.println("\n------[ ERROR MESSAGE ]------");
+                if (ADMIN)
+                    System.out.println("\n" + e);
+                throw e;
+            }
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            if (ADMIN)
-                System.out.println(e);
             System.out.println("\nTest not found!");
             help();
         } catch (IOException e) {
@@ -193,7 +197,7 @@ public class SimpleGrader {
             System.out.println(e);
         } catch (InterruptedException e) {
             if (ADMIN)
-                System.out.println(e);
+                System.out.println("Interrupt!");
         }
 
     }

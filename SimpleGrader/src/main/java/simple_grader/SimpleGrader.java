@@ -101,10 +101,6 @@ public class SimpleGrader {
         return runner;
     }
 
-    private static void cleanUp() {
-
-    }
-
     private static void vocalizeStart(String test, String file) {
         System.out.println("\nSimpleGrader " + VERSION + " | " + test + " | " + file + ".java");
     }
@@ -147,7 +143,6 @@ public class SimpleGrader {
         System.out.println(str);
     }
 
-    // TODO: check that JDK is installed
     public static void main(String[] args) throws IOException, InconsistentArrayLengthException, InterruptedException {
         HashMap<String, Test> testMap = TestCases.getMap(SECRETKEY);
         tests = testMap;
@@ -182,8 +177,6 @@ public class SimpleGrader {
         } catch (TestNotFoundException e) {
             System.out.println("\nTest not found!");
             help();
-        } finally {
-            cleanUp();
         }
     }
 }

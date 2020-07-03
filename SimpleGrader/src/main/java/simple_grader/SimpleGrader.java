@@ -10,11 +10,7 @@ import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
 import simple_grader.resource_converter.TestCases;
-
-import java.lang.InterruptedException;
 
 public class SimpleGrader {
     private static final long WAITTIME = 6;
@@ -23,25 +19,14 @@ public class SimpleGrader {
     private static boolean ADMIN = false;
     private static HashMap<String, Test> tests;
 
-    private static String getLines(InputStream ins) throws IOException {
-        String line = null;
-        String str = "\n";
-        BufferedReader in = new BufferedReader(new InputStreamReader(ins));
-        while ((line = in.readLine()) != null) {
-            str += line;
-        }
-        str += "\n";
-        return str;
-    }
-
-    private static Process runFile(String fileName) throws IOException, SecurityException { // TODO: check for timeout
+    private static Process runFile(String fileName) throws IOException, SecurityException {
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("java", fileName);
         Process pro = builder.start();
         return pro;
     }
 
-    private static Paper askQuestions(Process pro, Test test) throws InterruptedException {
+    private static Paper askQuestions(Process pro, Test test) throws InterruptedException { // TODO: check for timeout
         OutputStream stdin = pro.getOutputStream();
         InputStream stdout = pro.getInputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stdin));
@@ -98,19 +83,7 @@ public class SimpleGrader {
         return paper;
     }
 
-    private static Paper test(String testName, Test test)
-            throws IOException, SecurityException, InterruptedException, ClassNotFoundException {
-        Process compile = Runtime.getRuntime().exec("javac " + testName + ".java");
-        compile.waitFor();
-        if (compile.exitValue() != 0) {
-            String error = getLines(compile.getErrorStream());
-            if (error.contains("error: file not found:"))
-                error = "\nFile was not found!\n";
-            System.out.println(error);
-            throw new ClassNotFoundException("Falied to compile file");
-        }
-
-        Process runner = runFile(testName + ".java");
+    private static Paper test(Process runner, Test test) throws IOException, InterruptedException {
         Paper studentPaper = askQuestions(runner, test);
 
         if (studentPaper.getExitStatus())
@@ -121,21 +94,47 @@ public class SimpleGrader {
         return studentPaper;
     }
 
-    private static void runTest(String testName) throws IllegalArgumentException, IOException, InterruptedException,
-            SecurityException, ClassNotFoundException, IllegalArgumentException {
-        Test test = tests.get(testName.toUpperCase());
-        if (test == null)
-            throw new IllegalArgumentException();
-        Paper studentPaper = test(testName, test);
+    private static Process getFileProcess(String fileName)
+            throws IOException, InterruptedException, FailedToCompileException {
+        // Process compile = Runtime.getRuntime().exec("javac " + fileName + ".java"); // TODO: clean up .class file
+        // compile.waitFor();
+        // if (compile.exitValue() != 0) {
+        //     String error = getLines(compile.getErrorStream());
+        //     if (error.contains("error: file not found:"))
+        //         error = "\nFile was not found!\n";
+        //     System.out.println(error);
+        //     throw new FailedToCompileException();
+        // }
+
+        Process runner = runFile(fileName + ".java");
+        return runner;
+    }
+
+    private static void cleanUp() {
+
+    }
+
+    private static void vocalizeStart(String test, String file) {
+        System.out.println("\nSimpleGrader " + VERSION + " | " + test + " | " + file + ".java");
+    }
+
+    private static void runTest(String testName, String fileName)
+            throws TestNotFoundException, IOException, InterruptedException, FailedToCompileException {
+        if (!tests.containsKey(testName))
+            throw new TestNotFoundException();
+
+        Test test = tests.get(testName);
+        Process studentProgram = getFileProcess(fileName);
+
+        vocalizeStart(testName, fileName);
+
+        Paper studentPaper = test(studentProgram, test);
+
         System.out.println("\n---------[ Grading ]---------\n");
         studentPaper.grade(test);
         System.out.println("-----------------------------\n");
         System.out.println("Grade: " + studentPaper.getScore() + "%");
         System.out.println("\n-----------------------------\n");
-    }
-
-    private static void vocalizeStart(String file) {
-        System.out.println("\nSimpleGrader " + VERSION + " | Testing | " + file + ".java");
     }
 
     private static void help() {
@@ -158,17 +157,19 @@ public class SimpleGrader {
     }
 
     // TODO: check that JDK is installed
-    public static void main(String[] args) throws IOException, InconsistentArrayLengthException {
+    public static void main(String[] args) throws IOException, InconsistentArrayLengthException, InterruptedException {
         HashMap<String, Test> testMap = TestCases.getMap(SECRETKEY);
         tests = testMap;
 
-        String str;
+        String testName;
+        String fileName;
 
-        if (args.length == 0) {
+        try {
+            testName = args[0];
+            fileName = args[1];
+        } catch (IndexOutOfBoundsException e) {
             help();
             return;
-        } else {
-            str = args[0];
         }
 
         if (args.length == 2 && args[1] != null && args[1].equals(SECRETKEY)) {
@@ -178,27 +179,20 @@ public class SimpleGrader {
 
         try {
             try {
-                vocalizeStart(str);
-                runTest(str);
+                runTest(testName.toUpperCase(), fileName);
             } catch (Exception e) {
                 System.out.println("\n------[ ERROR MESSAGE ]------");
                 if (ADMIN)
                     System.out.println("\n" + e);
                 throw e;
             }
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (FailedToCompileException e) {
+            System.out.println("\n" + e.getMessage());
+        } catch (TestNotFoundException e) {
             System.out.println("\nTest not found!");
             help();
-        } catch (IOException e) {
-            System.out.println(e);
-        } catch (SecurityException e) {
-            System.out.println(e);
-        } catch (InterruptedException e) {
-            if (ADMIN)
-                System.out.println("Interrupt!");
+        } finally {
+            cleanUp();
         }
-
     }
 }

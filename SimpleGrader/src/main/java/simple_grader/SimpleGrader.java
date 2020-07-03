@@ -102,7 +102,7 @@ public class SimpleGrader {
     }
 
     private static void vocalizeStart(String test, String file) {
-        System.out.println("\nSimpleGrader " + VERSION + " | " + test + " | " + file + ".java");
+        System.out.println("\n" + test + " TEST | " + file + ".java");
     }
 
     private static void runTest(String testName, String fileName)
@@ -135,11 +135,11 @@ public class SimpleGrader {
         str += "\nAnswers are case insensitive.\n";
         str += "\nIn anycase, a template for any specific\nhomework should have been given to you.\n";
         str += "\n----------[ Usage ]----------\n";
-        str += "\nMake sure to name your file the appropriate\nname and use this jar to test it\n";
-        str += "\nIf testing freezes pressing Ctrl + C when\nfocused on the terminal will close the process\n";
-        str += "\nDo not include '.java' when typing filename\n";
+        str += "\nUse this jar to test your homework .java files\n";
+        str += "\nIf testing freezes, pressing Ctrl + C ,when\nfocused on the running terminal, will stop the process\n";
+        str += "\nGive test name as the first argument (case insensitive)\nand fileName second\n";
         str += "\nEg. usage:\n";
-        str += "\n\tjava -jar SimpleGrader.jar Recursion";
+        str += "\n\tjava -jar SimpleGrader.jar TestName MyRecursionFile";
         System.out.println(str);
     }
 
@@ -163,9 +163,11 @@ public class SimpleGrader {
             System.out.println("\n----------< ADMIN >----------");
         }
 
+        fileName = fileName.replace(".java", "");
+        testName = testName.toUpperCase();
         try {
             try {
-                runTest(testName.toUpperCase(), fileName);
+                runTest(testName, fileName);
             } catch (Exception e) {
                 System.out.println("\n------[ ERROR MESSAGE ]------");
                 if (ADMIN)

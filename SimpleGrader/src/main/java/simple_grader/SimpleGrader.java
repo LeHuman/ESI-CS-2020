@@ -96,15 +96,6 @@ public class SimpleGrader {
 
     private static Process getFileProcess(String fileName)
             throws IOException, InterruptedException, FailedToCompileException {
-        // Process compile = Runtime.getRuntime().exec("javac " + fileName + ".java"); // TODO: clean up .class file
-        // compile.waitFor();
-        // if (compile.exitValue() != 0) {
-        //     String error = getLines(compile.getErrorStream());
-        //     if (error.contains("error: file not found:"))
-        //         error = "\nFile was not found!\n";
-        //     System.out.println(error);
-        //     throw new FailedToCompileException();
-        // }
 
         Process runner = runFile(fileName + ".java");
         return runner;
